@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" fill="none">
+  <rect width="300" height="400" fill="#e9e4d6"/>
+  <rect x="14" y="14" width="272" height="372" stroke="#b9b19b" stroke-width="1.5"/>
+  <circle cx="150" cy="150" r="46" fill="#c9c0a8"/>
+  <path d="M74 318c0-46 34-80 76-80s76 34 76 80" fill="#c9c0a8"/>
+  <text x="150" y="356" text-anchor="middle" fill="#6f6856" font-family="Georgia, serif" font-size="13" letter-spacing="2">ARSIP PAHLAWAN</text>
+</svg>
