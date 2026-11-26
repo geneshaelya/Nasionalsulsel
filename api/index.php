@@ -2,10 +2,19 @@
 
 declare(strict_types=1);
 
+use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+
+$storagePath = '/tmp/storage';
+
 $tmpPaths = [
-    '/tmp/views',
-    '/tmp/cache',
-    '/tmp/sessions',
+    $storagePath,
+    $storagePath . '/app/public',
+    $storagePath . '/framework/cache/data',
+    $storagePath . '/framework/sessions',
+    $storagePath . '/framework/testing',
+    $storagePath . '/framework/views',
+    $storagePath . '/logs',
 ];
 
 foreach ($tmpPaths as $path) {
@@ -15,7 +24,7 @@ foreach ($tmpPaths as $path) {
 }
 
 $serverlessEnv = [
-    'VIEW_COMPILED_PATH' => '/tmp/views',
+    'VIEW_COMPILED_PATH' => $storagePath . '/framework/views',
     'APP_CONFIG_CACHE' => '/tmp/config.php',
     'APP_ROUTES_CACHE' => '/tmp/routes.php',
     'APP_EVENTS_CACHE' => '/tmp/events.php',
@@ -25,11 +34,17 @@ $serverlessEnv = [
 ];
 
 foreach ($serverlessEnv as $key => $value) {
-    if (getenv($key) === false) {
-        putenv("{$key}={$value}");
-        $_ENV[$key] = $value;
-        $_SERVER[$key] = $value;
-    }
+    putenv("{$key}={$value}");
+    $_ENV[$key] = $value;
+    $_SERVER[$key] = $value;
 }
 
-require __DIR__ . '/../public/index.php';
+define('LARAVEL_START', microtime(true));
+
+require __DIR__ . '/../vendor/autoload.php';
+
+/** @var Application $app */
+$app = require_once __DIR__ . '/../bootstrap/app.php';
+$app->useStoragePath($storagePath);
+
+$app->handleRequest(Request::capture());
